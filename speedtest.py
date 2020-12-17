@@ -5,7 +5,7 @@ import time
 from prometheus_client import start_http_server, Gauge
 
 def speedTest():
-    a = os.popen("python /Users/kk/Library/Python/3.7/bin/speedtest-cli --simple").read()
+    a = os.popen("python3 /usr/local/bin/speedtest-cli --simple").read()
     lines = a.split('\n')
     ts = time.time()
 
