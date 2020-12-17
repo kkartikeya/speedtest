@@ -9,9 +9,9 @@ RUN apt-get update && \
 RUN pip3 install --upgrade pip
 RUN pip3 install speedtest-cli prometheus_client
 
-EXPOSE 9102 / tcp
+EXPOSE 9102/tcp
 
-RUN mkdir / app
-ADD speedtest.py / app /
+RUN mkdir /app
+ADD speedtest.py /app/
 
 CMD ["python3", "/app/speedtest.py"]
