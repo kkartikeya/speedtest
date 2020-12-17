@@ -1,4 +1,4 @@
-FROM ubuntu: focal
+FROM ubuntu:focal
 
 LABEL maintainer = "kk@kkartikeya.com"
 
