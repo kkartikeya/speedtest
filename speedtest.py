@@ -1,35 +1,38 @@
 #!/usr/bin/python
 
-import os
+import sys
 import time
+import json
+import subprocess
 from prometheus_client import start_http_server, Gauge
 
+cmd = ['/usr/local/bin/speedtest', '--json']
 def speedTest():
-    a = os.popen("python3 /usr/local/bin/speedtest-cli --simple").read()
-    lines = a.split('\n')
-    ts = time.time()
 
-    #if speedtest could not connect set the speeds to 0
-    if "Cannot" in a:
-        p = 100
-        d = 0
-        u = 0
-    #extract the values for ping down and up values
+    p = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    p.wait()
+
+    stdout, stderr = p.communicate()
+    result = stdout
+
+    if result != None:
+        resultjson = json.loads(stdout)
+        return resultjson["ping"], resultjson["download"], resultjson["upload"]
     else:
-        p = lines[0][6:11]
-        d = lines[1][10:14]
-        u = lines[2][8:12]
-
-    return p, d, u
+        return 0,0,0
 
 def main():
     start_http_server(9102)
-    g_ping = Gauge('internet_speed_ping', 'Ping(ms)')
+    g_latency = Gauge('internet_speed_latency', 'Ping(ms)')
     g_download = Gauge('internet_speed_download', 'Download speed(Mbps)')
     g_upload = Gauge('internet_speed_upload', 'Upload speed(Mbps)')
     while True:
-        ping, download, upload = speedTest()
-        g_ping.set(ping)
+        latency, download, upload = speedTest()
+        g_latency.set(latency)
         g_download.set(download)
         g_upload.set(upload)
 
