@@ -19,10 +19,15 @@ def speedTest():
     stdout, stderr = p.communicate()
     result = stdout
 
-    if result != None:
-        resultjson = json.loads(stdout)
-        return resultjson["ping"], resultjson["download"], resultjson["upload"]
-    else:
+    try:
+        if result != None:
+            resultjson = json.loads(stdout)
+            return resultjson["ping"], resultjson["download"], resultjson["upload"]
+        else:
+            return 0,0,0
+    except:
+        print repr(result)
+        print sys.exc_info()
         return 0,0,0
 
 def main():
