@@ -26,8 +26,8 @@ def speedTest():
         else:
             return 0,0,0
     except:
-        print repr(result)
-        print sys.exc_info()
+        print (repr(result))
+        print (sys.exc_info())
         return 0,0,0
 
 def main():
